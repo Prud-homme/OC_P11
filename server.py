@@ -54,6 +54,11 @@ def book(competition, club):
         return render_template(
             "booking.html", club=found_club, competition=found_competition
         )
+    elif found_club and found_competition and not can_booking_filter(found_competition):
+        flash("You cannot book places for an ended competition!")
+        return render_template(
+            "welcome.html", club=found_club, competitions=competitions
+        )
     else:
         flash("Something went wrong-please try again")
         return render_template(
@@ -63,7 +68,9 @@ def book(competition, club):
 
 @app.route("/purchase_places", methods=["POST"])
 def purchase_places():
-    competition = [c for c in competitions if c["name"] == request.form["competition"]][0]
+    competition = [c for c in competitions if c["name"] == request.form["competition"]][
+        0
+    ]
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
     places_required = int(request.form["places"])
 
