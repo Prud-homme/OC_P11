@@ -68,7 +68,7 @@ def purchase_places():
     places_required = int(request.form["places"])
 
     if not can_booking_filter(competition):
-        flash("Past competition")
+        flash("You cannot book places for an ended competition!")
         return render_template("welcome.html", club=club, competitions=competitions)
 
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - places_required
