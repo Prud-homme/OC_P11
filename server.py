@@ -77,7 +77,18 @@ def purchase_places():
     if not can_booking_filter(competition):
         flash("You cannot book places for an ended competition!")
         return render_template("welcome.html", club=club, competitions=competitions)
-
+    
+    elif places_required > 12:
+        flash("Cannot booking more than 12 places per competition")
+        return redirect(
+            url_for("book", club=club["name"], competition=competition["name"])
+        )
+    
+    elif places_required < 0:
+        flash("Cannot booking less than 0 place per competition")
+        return redirect(
+            url_for("book", club=club["name"], competition=competition["name"])
+        )
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - places_required
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)

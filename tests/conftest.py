@@ -11,8 +11,7 @@ def client():
         yield client
 
 
-@pytest.fixture
-def mocker_future_competitions(mocker):
+def generate_future_competitions():
     now = datetime.now()
     datetime1 = now + timedelta(days=10)
     datetime2 = now + timedelta(days=50)
@@ -22,12 +21,12 @@ def mocker_future_competitions(mocker):
         {
             "name": "Spring Festival",
             "date": datetime1.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "25",
+            "numberOfPlaces": "24",
         },
         {
             "name": "Fall Classic",
             "date": datetime2.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "13",
+            "numberOfPlaces": "14",
         },
         {
             "name": "Spring Classic",
@@ -40,11 +39,15 @@ def mocker_future_competitions(mocker):
             "numberOfPlaces": "18",
         },
     ]
-    mocker.patch.object(server, "competitions", competitions)
+    return competitions
 
 
 @pytest.fixture
-def mocker_past_competitions(mocker):
+def mocker_future_competitions(mocker):
+    mocker.patch.object(server, "competitions", generate_future_competitions())
+
+
+def generate_past_competitions():
     now = datetime.now()
     datetime1 = now - timedelta(days=10)
     datetime2 = now - timedelta(days=50)
@@ -54,12 +57,12 @@ def mocker_past_competitions(mocker):
         {
             "name": "Spring Festival",
             "date": datetime1.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "25",
+            "numberOfPlaces": "24",
         },
         {
             "name": "Fall Classic",
             "date": datetime2.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "13",
+            "numberOfPlaces": "14",
         },
         {
             "name": "Spring Classic",
@@ -72,14 +75,23 @@ def mocker_past_competitions(mocker):
             "numberOfPlaces": "18",
         },
     ]
-    mocker.patch.object(server, "competitions", competitions)
+    return competitions
+
+
+@pytest.fixture
+def mocker_past_competitions(mocker):
+    mocker.patch.object(server, "competitions", generate_past_competitions())
+
+
+def generate_clubs():
+    clubs = [
+        {"name": "Simply Lift", "email": "john@simplylift.co", "points": "16"},
+        {"name": "Iron Temple", "email": "admin@irontemple.com", "points": "4"},
+        {"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "8"},
+    ]
+    return clubs
 
 
 @pytest.fixture
 def mocker_clubs(mocker):
-    clubs = [
-        {"name": "Simply Lift", "email": "john@simplylift.co", "points": "13"},
-        {"name": "Iron Temple", "email": "admin@irontemple.com", "points": "4"},
-        {"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "12"},
-    ]
-    mocker.patch.object(server, "clubs", clubs)
+    mocker.patch.object(server, "clubs", generate_clubs())
