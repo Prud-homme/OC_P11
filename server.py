@@ -58,6 +58,11 @@ def purchase_places():
         return redirect(
             url_for("book", club=club["name"], competition=competition["name"])
         )
+    elif placesRequired < 0:
+        flash("Cannot booking less than 0 place per competition")
+        return redirect(
+            url_for("book", club=club["name"], competition=competition["name"])
+        )
 
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - placesRequired
     flash("Great-booking complete!")
