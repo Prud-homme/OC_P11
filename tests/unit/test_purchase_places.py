@@ -9,7 +9,7 @@ class TestPurchasePlaces:
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
     @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [3, 5, 9, 12])
+    @pytest.mark.parametrize("places", [0, 1, 2, 3, 4])
     def test_purchase_places_future_competition(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -105,3 +105,27 @@ class TestPurchasePlaces:
         assert redirect_response.status == "200 OK"
         assert "Cannot booking less than 0 place per competition" in redirect_response.data.decode()
 
+    @pytest.mark.usefixtures("mocker_future_competitions")
+    @pytest.mark.parametrize("competition", generate_future_competitions())
+    @pytest.mark.parametrize("club, places", [
+        ({"name": "Iron Temple", "email": "admin@irontemple.com", "points": "4"}, 5),
+        ({"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "8"}, 9),
+    ])
+    def test_club_shouldnt_use_more_than_their_points(self, competition, club, places):
+        data = {
+            "competition": competition["name"],
+            "club": club["name"],
+            "places": places,
+        }
+
+        response = self.client.post("/purchase_places", data=data)
+        assert response.status_code == 302
+        assert response.status == "302 FOUND"
+
+        redirect_response = self.client.post(
+            "/purchase_places", data=data, follow_redirects=True
+        )
+        flash_message = f"You cannot use more than {club['points']} points"
+        assert redirect_response.status_code == 200
+        assert redirect_response.status == "200 OK"
+        assert flash_message in redirect_response.data.decode()

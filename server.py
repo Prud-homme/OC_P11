@@ -89,6 +89,12 @@ def purchase_places():
         return redirect(
             url_for("book", club=club["name"], competition=competition["name"])
         )
+
+    elif places_required > int(club["points"]):
+        flash(f"You cannot use more than {club['points']} points")
+        return redirect(
+            url_for("book", competition=competition["name"], club=club["name"])
+        )
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - places_required
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)
