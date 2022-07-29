@@ -9,7 +9,7 @@ class TestPurchasePlaces:
     @pytest.mark.parametrize("competition", server.competitions)
     @pytest.mark.parametrize("club", server.clubs)
     @pytest.mark.parametrize("places", [3, 5, 9, 12])
-    def test_booking_future_competition(self, competition, club, places):
+    def test_purchase_places_future_competition(self, competition, club, places):
         data = {
             "competition": competition["name"],
             "club": club["name"],
@@ -50,7 +50,7 @@ class TestPurchasePlaces:
     @pytest.mark.parametrize("competition", server.competitions)
     @pytest.mark.parametrize("club", server.clubs)
     @pytest.mark.parametrize("places", [3, 5, 9, 12])
-    def test_booking_past_competition(self, competition, club, places):
+    def test_purchase_places_past_competition(self, competition, club, places):
         data = {
             "competition": competition["name"],
             "club": club["name"],
