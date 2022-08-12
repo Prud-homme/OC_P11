@@ -2,7 +2,13 @@ import pytest
 from math import floor
 
 import server
-from tests.conftest import generate_clubs, generate_future_competitions, generate_past_competitions, generate_valid_purchase, generate_invalid_purchase_more_than_points
+from tests.conftest import (
+    generate_clubs,
+    generate_future_competitions,
+    generate_past_competitions,
+    generate_valid_purchase,
+    generate_invalid_purchase_more_than_points,
+)
 
 
 @pytest.mark.usefixtures("client_class", "mocker_clubs")
@@ -16,7 +22,7 @@ class TestPurchasePlaces:
             "club": club["name"],
             "places": places,
         }
-        
+
         response = self.client.post("/purchase_places", data=data)
         assert response.status_code == 200
         assert response.status == "200 OK"
@@ -81,7 +87,10 @@ class TestPurchasePlaces:
         )
         assert redirect_response.status_code == 200
         assert redirect_response.status == "200 OK"
-        assert "Cannot booking more than 12 places per competition" in redirect_response.data.decode()
+        assert (
+            "Cannot booking more than 12 places per competition"
+            in redirect_response.data.decode()
+        )
 
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
@@ -102,11 +111,16 @@ class TestPurchasePlaces:
         )
         assert redirect_response.status_code == 200
         assert redirect_response.status == "200 OK"
-        assert "Cannot booking less than 0 place per competition" in redirect_response.data.decode()
+        assert (
+            "Cannot booking less than 0 place per competition"
+            in redirect_response.data.decode()
+        )
 
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club, places", generate_invalid_purchase_more_than_points())
+    @pytest.mark.parametrize(
+        "club, places", generate_invalid_purchase_more_than_points()
+    )
     def test_club_shouldnt_use_more_than_their_points(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -121,7 +135,7 @@ class TestPurchasePlaces:
         redirect_response = self.client.post(
             "/purchase_places", data=data, follow_redirects=True
         )
-        max_places_can_book = floor(int(club['points'])/server.POINTS_PER_PLACE)
+        max_places_can_book = floor(int(club["points"]) / server.POINTS_PER_PLACE)
         flash_message = f"You cannot book more than {max_places_can_book} places"
         assert redirect_response.status_code == 200
         assert redirect_response.status == "200 OK"
@@ -157,8 +171,10 @@ class TestPurchasePlaces:
             "club": club["name"],
             "places": places,
         }
-        
-        expected_remaining_points = int(club["points"]) - places * server.POINTS_PER_PLACE
+
+        expected_remaining_points = (
+            int(club["points"]) - places * server.POINTS_PER_PLACE
+        )
         self.client.post("/purchase_places", data=data)
 
         remaining_points = int(
