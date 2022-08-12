@@ -1,8 +1,11 @@
 import json
 from datetime import datetime
+from math import floor
 
 from flask import Flask, flash, redirect, render_template, request, url_for
 
+
+POINTS_PER_PLACE = 3
 
 def load_clubs():
     with open("clubs.json") as c:
@@ -77,7 +80,8 @@ def purchase_places():
     ]
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
     places_required = int(request.form["places"])
-
+    max_places_can_book = floor(int(club['points'])/POINTS_PER_PLACE)
+    
     if not can_booking_filter(competition):
         flash("You cannot book places for an ended competition!")
         return render_template("welcome.html", club=club, competitions=competitions)
@@ -94,13 +98,13 @@ def purchase_places():
             url_for("book", club=club["name"], competition=competition["name"])
         )
 
-    elif places_required > int(club["points"]):
-        flash(f"You cannot use more than {club['points']} points")
+    elif places_required > max_places_can_book:
+        flash(f"You cannot book more than {max_places_can_book} places")
         return redirect(
             url_for("book", competition=competition["name"], club=club["name"])
         )
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - places_required
-    club["points"] = int(club["points"]) - places_required
+    club["points"] = int(club["points"]) - places_required * POINTS_PER_PLACE
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)
 
