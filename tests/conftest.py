@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from math import floor
 
 import pytest
 
@@ -26,7 +27,7 @@ def generate_future_competitions():
         {
             "name": "Fall Classic",
             "date": datetime2.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "14",
+            "numberOfPlaces": "12",
         },
         {
             "name": "Spring Classic",
@@ -36,7 +37,7 @@ def generate_future_competitions():
         {
             "name": "Summer Festival",
             "date": datetime4.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "18",
+            "numberOfPlaces": "0",
         },
     ]
     return competitions
@@ -62,7 +63,7 @@ def generate_past_competitions():
         {
             "name": "Fall Classic",
             "date": datetime2.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "14",
+            "numberOfPlaces": "12",
         },
         {
             "name": "Spring Classic",
@@ -72,7 +73,7 @@ def generate_past_competitions():
         {
             "name": "Summer Festival",
             "date": datetime4.strftime("%Y-%m-%d %H:%M:%S"),
-            "numberOfPlaces": "18",
+            "numberOfPlaces": "0",
         },
     ]
     return competitions
@@ -85,9 +86,9 @@ def mocker_past_competitions(mocker):
 
 def generate_clubs():
     clubs = [
-        {"name": "Simply Lift", "email": "john@simplylift.co", "points": "16"},
-        {"name": "Iron Temple", "email": "admin@irontemple.com", "points": "4"},
-        {"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "8"},
+        {"name": "Simply Lift", "email": "john@simplylift.co", "points": str(15*server.POINTS_PER_PLACE)},
+        {"name": "Iron Temple", "email": "admin@irontemple.com", "points": str(5*server.POINTS_PER_PLACE)},
+        {"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "0"},
     ]
     return clubs
 
@@ -95,3 +96,15 @@ def generate_clubs():
 @pytest.fixture
 def mocker_clubs(mocker):
     mocker.patch.object(server, "clubs", generate_clubs())
+
+
+def generate_valid_purchase():
+    clubs = generate_clubs()
+    places = [12, 4, 0]
+    return tuple(zip(clubs, places))
+
+
+def generate_invalid_purchase_more_than_points():
+    clubs = generate_clubs()
+    places = [7, 12]
+    return tuple(zip(clubs[1:], places))

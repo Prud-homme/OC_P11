@@ -1,21 +1,22 @@
 import pytest
+from math import floor
 
 import server
-from tests.conftest import generate_clubs, generate_future_competitions, generate_past_competitions
+from tests.conftest import generate_clubs, generate_future_competitions, generate_past_competitions, generate_valid_purchase, generate_invalid_purchase_more_than_points
 
 
 @pytest.mark.usefixtures("client_class", "mocker_clubs")
 class TestPurchasePlaces:
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [0, 1, 2, 3, 4])
+    @pytest.mark.parametrize("club, places", generate_valid_purchase())
     def test_purchase_places_future_competition(self, competition, club, places):
         data = {
             "competition": competition["name"],
             "club": club["name"],
             "places": places,
         }
+        
         response = self.client.post("/purchase_places", data=data)
         assert response.status_code == 200
         assert response.status == "200 OK"
@@ -23,8 +24,7 @@ class TestPurchasePlaces:
 
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [3, 5, 9, 12])
+    @pytest.mark.parametrize("club, places", generate_valid_purchase())
     def test_method_not_allowed(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -48,8 +48,7 @@ class TestPurchasePlaces:
 
     @pytest.mark.usefixtures("mocker_past_competitions")
     @pytest.mark.parametrize("competition", generate_past_competitions())
-    @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [3, 5, 9, 12])
+    @pytest.mark.parametrize("club, places", generate_valid_purchase())
     def test_purchase_places_past_competition(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -66,7 +65,7 @@ class TestPurchasePlaces:
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
     @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [17, 24, 30])
+    @pytest.mark.parametrize("places", [13, 1000])
     def test_club_shouldnt_book_more_than_12_places(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -87,7 +86,7 @@ class TestPurchasePlaces:
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
     @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [-1, -5, -20])
+    @pytest.mark.parametrize("places", [-1, -500])
     def test_club_shouldnt_book_less_than_0_place(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -107,10 +106,7 @@ class TestPurchasePlaces:
 
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club, places", [
-        ({"name": "Iron Temple", "email": "admin@irontemple.com", "points": "4"}, 5),
-        ({"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "8"}, 9),
-    ])
+    @pytest.mark.parametrize("club, places", generate_invalid_purchase_more_than_points())
     def test_club_shouldnt_use_more_than_their_points(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -125,15 +121,15 @@ class TestPurchasePlaces:
         redirect_response = self.client.post(
             "/purchase_places", data=data, follow_redirects=True
         )
-        flash_message = f"You cannot use more than {club['points']} points"
+        max_places_can_book = floor(int(club['points'])/server.POINTS_PER_PLACE)
+        flash_message = f"You cannot book more than {max_places_can_book} places"
         assert redirect_response.status_code == 200
         assert redirect_response.status == "200 OK"
         assert flash_message in redirect_response.data.decode()
 
     @pytest.mark.usefixtures("mocker_future_competitions")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [0, 1, 2, 3, 4])
+    @pytest.mark.parametrize("club, places", generate_valid_purchase())
     def test_update_competition_number_of_places(self, competition, club, places):
         data = {
             "competition": competition["name"],
@@ -152,16 +148,17 @@ class TestPurchasePlaces:
         assert remaining_places == expected_remaining_places
 
     @pytest.mark.usefixtures("mocker_future_competitions")
+    @pytest.mark.usefixtures("mocker_clubs")
     @pytest.mark.parametrize("competition", generate_future_competitions())
-    @pytest.mark.parametrize("club", generate_clubs())
-    @pytest.mark.parametrize("places", [0, 1, 2, 3, 4])
+    @pytest.mark.parametrize("club, places", generate_valid_purchase())
     def test_update_club_points(self, competition, club, places):
         data = {
             "competition": competition["name"],
             "club": club["name"],
             "places": places,
         }
-        expected_remaining_points = int(club["points"]) - places
+        
+        expected_remaining_points = int(club["points"]) - places * server.POINTS_PER_PLACE
         self.client.post("/purchase_places", data=data)
 
         remaining_points = int(
