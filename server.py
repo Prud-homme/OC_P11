@@ -116,4 +116,5 @@ def clubs_points():
 
 @app.route("/logout")
 def logout():
+    flash("Successful logout!")
     return redirect(url_for("index"))
