@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from math import floor
 
 import pytest
 
@@ -13,6 +12,7 @@ def client():
 
 
 def generate_future_competitions():
+    """Generates a list of competitions with a date after today"""
     now = datetime.now()
     datetime1 = now + timedelta(days=10)
     datetime2 = now + timedelta(days=50)
@@ -49,6 +49,7 @@ def mocker_future_competitions(mocker):
 
 
 def generate_past_competitions():
+    """Generates a list of competitions with a date before today"""
     now = datetime.now()
     datetime1 = now - timedelta(days=10)
     datetime2 = now - timedelta(days=50)
@@ -85,9 +86,18 @@ def mocker_past_competitions(mocker):
 
 
 def generate_clubs():
+    """Generates a list of clubs"""
     clubs = [
-        {"name": "Simply Lift", "email": "john@simplylift.co", "points": str(15*server.POINTS_PER_PLACE)},
-        {"name": "Iron Temple", "email": "admin@irontemple.com", "points": str(5*server.POINTS_PER_PLACE)},
+        {
+            "name": "Simply Lift",
+            "email": "john@simplylift.co",
+            "points": str(15 * server.POINTS_PER_PLACE),
+        },
+        {
+            "name": "Iron Temple",
+            "email": "admin@irontemple.com",
+            "points": str(5 * server.POINTS_PER_PLACE),
+        },
         {"name": "She Lifts", "email": "kate@shelifts.co.uk", "points": "0"},
     ]
     return clubs
@@ -99,12 +109,23 @@ def mocker_clubs(mocker):
 
 
 def generate_valid_purchase():
+    """
+    Return a tuple containing tuples.
+    Each of these tuples represents a club and
+    a number of places to be purchased.
+    """
     clubs = generate_clubs()
     places = [12, 4, 0]
     return tuple(zip(clubs, places))
 
 
 def generate_invalid_purchase_more_than_points():
+    """
+    Return a tuple containing tuples.
+    Each of these tuples represents a club and
+    a number of places to be purchased.
+    However, the club does not have enough points to make the purchase.
+    """
     clubs = generate_clubs()
     places = [7, 12]
     return tuple(zip(clubs[1:], places))
