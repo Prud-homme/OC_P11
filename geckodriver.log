@@ -1,0 +1,48 @@
+1660898650538	geckodriver	INFO	Listening on 127.0.0.1:60886
+1660898653635	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "60887" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileU97ygI"
+1660898654129	Marionette	INFO	Marionette enabled
+1660898654135	Marionette	INFO	Listening on port 60901
+WebDriver BiDi listening on ws://localhost:60887
+Read port: 60901
+1660898654371	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileU97ygI\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:60887/devtools/browser/64dfa6f4-0f3e-4739-b527-b841f705e82d
+1660898658326	Marionette	INFO	Stopped listening on port 60901
+1660898662907	geckodriver	INFO	Listening on 127.0.0.1:60953
+1660898665975	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "60954" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileUUuJ8v"
+1660898666588	Marionette	INFO	Marionette enabled
+1660898666598	Marionette	INFO	Listening on port 60965
+WebDriver BiDi listening on ws://localhost:60954
+Read port: 60965
+1660898666857	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileUUuJ8v\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:60954/devtools/browser/2273c313-48f6-4d23-9df8-75774652e320
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "http://127.0.0.1:5000"
+JavaScript error: resource://gre/modules/XULStore.jsm, line 68: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 68: Error: Can't find profile directory.
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "http://127.0.0.1:5000"
+1660898681637	Marionette	INFO	Stopped listening on port 60965
+1660898692983	geckodriver	INFO	Listening on 127.0.0.1:61047
+1660898696080	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "61048" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileeOD503"
+1660898696615	Marionette	INFO	Marionette enabled
+1660898696627	Marionette	INFO	Listening on port 61061
+WebDriver BiDi listening on ws://localhost:61048
+Read port: 61061
+1660898696848	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileeOD503\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:61048/devtools/browser/21585a6b-22eb-4582-8431-0ceab08d1813
+1660898700734	Marionette	INFO	Stopped listening on port 61061
+1660898705407	geckodriver	INFO	Listening on 127.0.0.1:61105
+1660898708491	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "61106" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileDyUqF5"
+1660898709008	Marionette	INFO	Marionette enabled
+1660898709018	Marionette	INFO	Listening on port 61132
+WebDriver BiDi listening on ws://localhost:61106
+Read port: 61132
+1660898709232	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Florent\\AppData\\Local\\Temp\\rust_mozprofileDyUqF5\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://localhost:61106/devtools/browser/24bcccd1-0f76-4287-97c6-8bf2911a6a16
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "http://127.0.0.1:5000"
+JavaScript error: resource://gre/modules/XULStore.jsm, line 68: Error: Can't find profile directory.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 68: Error: Can't find profile directory.
+console.warn: LoginRecipes: "getRecipes: falling back to a synchronous message for:" "http://127.0.0.1:5000"
+1660898723821	Marionette	INFO	Stopped listening on port 61132
