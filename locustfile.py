@@ -31,5 +31,5 @@ class WebsiteUser(HttpUser):
         self.client.get("/logout")
 
     @task
-    def index(self):
+    def board_points(self):
         self.client.get("/clubs_points")
