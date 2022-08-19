@@ -5,12 +5,7 @@ from tests.conftest import (generate_future_competitions,
                             generate_past_competitions)
 
 
-@pytest.mark.usefixtures("client_class")
 class TestCanBookingFilter:
-    """
-    Test class for filter to determine if a competition
-    is in the past or the future
-    """
 
     @pytest.mark.parametrize("competition", generate_future_competitions())
     def test_competition_is_in_future(self, competition):
