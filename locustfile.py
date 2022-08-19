@@ -29,3 +29,7 @@ class WebsiteUser(HttpUser):
     @task
     def logout(self):
         self.client.get("/logout")
+
+    @task
+    def index(self):
+        self.client.get("/clubs_points")
